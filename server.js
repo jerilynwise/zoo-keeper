@@ -9,6 +9,8 @@ const path = require('path');
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
+// allows express to find certain files without having to write a a path to every single one
+app.use(express.static('public'));
 
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
@@ -112,6 +114,25 @@ app.post('/api/animals', (req, res) => {
   }
 });
 
+//gets the index.html page
+app.get('/',(req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+//gets the animals html
+app.get('/animals', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+//gets the zookeeper page
+app.get('zookeepers', (req ,res) => {
+  res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+//wild card route that will keep the user from receiving an error- make sure this one is last will take precedence
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
 
 
 app.listen(PORT, () => {
